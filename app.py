@@ -200,310 +200,310 @@ if pagina == "📝 Estudiante Individual":
                 help="Edad del estudiante cuando se graduó",
             )
 
-    # 🎓 Educación padres
-    st.subheader("🎓 Educación Máxima de los Padres/Madres")
-    st.markdown("*Marque 1 si alguno de los padres alcanzó este nivel educativo*")
-    col1, col2 = st.columns(2)
-    with col1:
-        educ_max_padremadre1 = st.selectbox(
-            "Hasta bachillerato/secundaria completa",
-            options=[0, 1],
-            format_func=lambda x: "Sí" if x == 1 else "No",
-        )
-        educ_max_padremadre2 = st.selectbox(
-            "Técnica o tecnológica (incompleta o completa)",
-            options=[0, 1],
-            format_func=lambda x: "Sí" if x == 1 else "No",
-        )
-        educ_max_padremadre3 = st.selectbox(
-            "Educación profesional incompleta",
-            options=[0, 1],
-            format_func=lambda x: "Sí" if x == 1 else "No",
-        )
-    with col2:
-        educ_max_padremadre4 = st.selectbox(
-            "Educación profesional completa",
-            options=[0, 1],
-            format_func=lambda x: "Sí" if x == 1 else "No",
-        )
-        educ_max_padremadre5 = st.selectbox(
-            "Postgrado",
-            options=[0, 1],
-            format_func=lambda x: "Sí" if x == 1 else "No",
+        # 🎓 Educación padres
+        st.subheader("🎓 Educación Máxima de los Padres/Madres")
+        st.markdown("*Marque 1 si alguno de los padres alcanzó este nivel educativo*")
+        col1, col2 = st.columns(2)
+        with col1:
+            educ_max_padremadre1 = st.selectbox(
+                "Hasta bachillerato/secundaria completa",
+                options=[0, 1],
+                format_func=lambda x: "Sí" if x == 1 else "No",
+            )
+            educ_max_padremadre2 = st.selectbox(
+                "Técnica o tecnológica (incompleta o completa)",
+                options=[0, 1],
+                format_func=lambda x: "Sí" if x == 1 else "No",
+            )
+            educ_max_padremadre3 = st.selectbox(
+                "Educación profesional incompleta",
+                options=[0, 1],
+                format_func=lambda x: "Sí" if x == 1 else "No",
+            )
+        with col2:
+            educ_max_padremadre4 = st.selectbox(
+                "Educación profesional completa",
+                options=[0, 1],
+                format_func=lambda x: "Sí" if x == 1 else "No",
+            )
+            educ_max_padremadre5 = st.selectbox(
+                "Postgrado",
+                options=[0, 1],
+                format_func=lambda x: "Sí" if x == 1 else "No",
+            )
+
+        # ⚠️ Faltas
+        st.subheader("⚠️ Comportamiento")
+        total_faltas_disc = st.number_input(
+            "Número total de faltas disciplinarias del estudiante",
+            min_value=0,
+            max_value=100,
+            value=0,
         )
 
-    # ⚠️ Faltas
-    st.subheader("⚠️ Comportamiento")
-    total_faltas_disc = st.number_input(
-        "Número total de faltas disciplinarias del estudiante",
-        min_value=0,
-        max_value=100,
-        value=0,
-    )
+        # 📚 Promedios 8°
+        st.subheader("📚 Promedios de 8° Grado")
+        st.markdown("*Promedio obtenido en 8° grado en cada área (escala 0-100)*")
+        col1, col2 = st.columns(2)
+        with col1:
+            human_langs_08 = st.number_input(
+                "Humanidades, lengua castellana e idiomas extranjeros",
+                min_value=0.0,
+                max_value=100.0,
+                value=85.0,
+                step=0.1,
+            )
+            maths_08 = st.number_input(
+                "Matemáticas",
+                min_value=0.0,
+                max_value=100.0,
+                value=85.0,
+                step=0.1,
+            )
+        with col2:
+            nat_sc_08 = st.number_input(
+                "Ciencias naturales y educación ambiental",
+                min_value=0.0,
+                max_value=100.0,
+                value=85.0,
+                step=0.1,
+            )
+            soc_sc_08 = st.number_input(
+                "Ciencias sociales, historia, geografía, constitución política y democracia",
+                min_value=0.0,
+                max_value=100.0,
+                value=85.0,
+                step=0.1,
+            )
 
-    # 📚 Promedios 8°
-    st.subheader("📚 Promedios de 8° Grado")
-    st.markdown("*Promedio obtenido en 8° grado en cada área (escala 0-100)*")
-    col1, col2 = st.columns(2)
-    with col1:
-        human_langs_08 = st.number_input(
-            "Humanidades, lengua castellana e idiomas extranjeros",
-            min_value=0.0,
-            max_value=100.0,
-            value=85.0,
-            step=0.1,
-        )
-        maths_08 = st.number_input(
-            "Matemáticas",
-            min_value=0.0,
-            max_value=100.0,
-            value=85.0,
-            step=0.1,
-        )
-    with col2:
-        nat_sc_08 = st.number_input(
-            "Ciencias naturales y educación ambiental",
-            min_value=0.0,
-            max_value=100.0,
-            value=85.0,
-            step=0.1,
-        )
-        soc_sc_08 = st.number_input(
-            "Ciencias sociales, historia, geografía, constitución política y democracia",
-            min_value=0.0,
-            max_value=100.0,
-            value=85.0,
-            step=0.1,
-        )
+        # 📊 NWEA
+        st.subheader("📊 Pruebas NWEA MAP (Grados 9° y 10°)")
+        st.markdown("*Percentiles obtenidos en las pruebas estandarizadas NWEA MAP*")
+        col1, col2 = st.columns(2)
+        with col1:
+            nwea_math_perc = st.number_input(
+                "Percentil en Matemáticas NWEA MAP",
+                min_value=1.0,
+                max_value=99.0,
+                value=50.0,
+                step=0.1,
+            )
+        with col2:
+            nwea_reading_perc = st.number_input(
+                "Percentil en Comprensión Lectora NWEA MAP",
+                min_value=1.0,
+                max_value=99.0,
+                value=50.0,
+                step=0.1,
+            )
 
-    # 📊 NWEA
-    st.subheader("📊 Pruebas NWEA MAP (Grados 9° y 10°)")
-    st.markdown("*Percentiles obtenidos en las pruebas estandarizadas NWEA MAP*")
-    col1, col2 = st.columns(2)
-    with col1:
-        nwea_math_perc = st.number_input(
-            "Percentil en Matemáticas NWEA MAP",
-            min_value=1.0,
-            max_value=99.0,
-            value=50.0,
-            step=0.1,
+        st.markdown("---")
+        submitted = st.form_submit_button("🚀 Procesar Datos", use_container_width=True)
+
+    # ---------- Procesar ----------
+    if submitted:
+        if not id_estudiante.strip():
+            st.error("⚠️ Por favor ingrese un identificador del estudiante")
+            st.stop()
+
+        # 1️⃣ Construir diccionario con todos los datos del formulario
+        datos = {
+            "id": id_estudiante,
+            "estu_mujer": estu_mujer,
+            "edad_grado": edad_grado,
+            "educ_max_padremadre1": educ_max_padremadre1,
+            "educ_max_padremadre2": educ_max_padremadre2,
+            "educ_max_padremadre3": educ_max_padremadre3,
+            "educ_max_padremadre4": educ_max_padremadre4,
+            "educ_max_padremadre5": educ_max_padremadre5,
+            "total_faltas_disc": total_faltas_disc,
+            "human_langs_08": human_langs_08,
+            "maths_08": maths_08,
+            "nat_sc_08": nat_sc_08,
+            "soc_sc_08": soc_sc_08,
+            "nwea_math_perc": nwea_math_perc,
+            "nwea_reading_perc": nwea_reading_perc,
+        }
+
+        # 2️⃣ Calcular predicciones para todas las materias
+        materias = ["lectura", "math", "soc", "cnat", "ingles", "global"]
+        resultados = {}
+        detalles_calculo = {}
+        errores = []
+        
+        for mat in materias:
+            try:
+                hoja = f"s11_{mat}_mod{modulo}"
+                if hoja not in MODELOS:
+                    errores.append(f"No se encontró el modelo para {mat} (hoja: {hoja})")
+                    continue
+                
+                modelo = MODELOS[hoja]
+                prediccion, detalles = predecir_con_detalles(modelo, datos, mat)
+                resultados[mat.upper()] = prediccion
+                detalles_calculo[mat.upper()] = detalles
+                
+            except Exception as e:
+                errores.append(f"Error al predecir {mat}: {str(e)}")
+        
+        # Mostrar errores si los hay
+        if errores:
+            for error in errores:
+                st.warning(f"⚠️ {error}")
+        
+        if not resultados:
+            st.error("❌ No se pudieron calcular predicciones. Revise el archivo de coeficientes.")
+            st.stop()
+
+        # 3️⃣ Mostrar confirmación y resumen
+        st.success("✅ ¡Datos capturados y procesados exitosamente!")
+
+        # ---- Resumen de predicciones
+        st.subheader("📈 Predicción por Materia")
+        pred_df = (
+            pd.Series(resultados)
+            .rename_axis("Materia")
+            .reset_index(name="Predicción")
+            .sort_values("Materia")
         )
-    with col2:
-        nwea_reading_perc = st.number_input(
-            "Percentil en Comprensión Lectora NWEA MAP",
-            min_value=1.0,
-            max_value=99.0,
-            value=50.0,
-            step=0.1,
-        )
-
-    st.markdown("---")
-    submitted = st.form_submit_button("🚀 Procesar Datos", use_container_width=True)
-
-# ---------- Procesar ----------
-if submitted:
-    if not id_estudiante.strip():
-        st.error("⚠️ Por favor ingrese un identificador del estudiante")
-        st.stop()
-
-    # 1️⃣ Construir diccionario con todos los datos del formulario
-    datos = {
-        "id": id_estudiante,
-        "estu_mujer": estu_mujer,
-        "edad_grado": edad_grado,
-        "educ_max_padremadre1": educ_max_padremadre1,
-        "educ_max_padremadre2": educ_max_padremadre2,
-        "educ_max_padremadre3": educ_max_padremadre3,
-        "educ_max_padremadre4": educ_max_padremadre4,
-        "educ_max_padremadre5": educ_max_padremadre5,
-        "total_faltas_disc": total_faltas_disc,
-        "human_langs_08": human_langs_08,
-        "maths_08": maths_08,
-        "nat_sc_08": nat_sc_08,
-        "soc_sc_08": soc_sc_08,
-        "nwea_math_perc": nwea_math_perc,
-        "nwea_reading_perc": nwea_reading_perc,
-    }
-
-    # 2️⃣ Calcular predicciones para todas las materias
-    materias = ["lectura", "math", "soc", "cnat", "ingles", "global"]
-    resultados = {}
-    detalles_calculo = {}
-    errores = []
-    
-    for mat in materias:
-        try:
-            hoja = f"s11_{mat}_mod{modulo}"
-            if hoja not in MODELOS:
-                errores.append(f"No se encontró el modelo para {mat} (hoja: {hoja})")
-                continue
+        # Redondear predicciones para mejor visualización
+        pred_df["Predicción"] = pred_df["Predicción"].round(4)
+        st.dataframe(pred_df, use_container_width=True)
+        
+        # ---- Explicación de cómo se calculan las predicciones
+        with st.expander("🧮 ¿Cómo se calculan estas predicciones?"):
+            st.markdown("""
+            ### 📊 **Método de Cálculo: Regresión Lineal**
             
-            modelo = MODELOS[hoja]
-            prediccion, detalles = predecir_con_detalles(modelo, datos, mat)
-            resultados[mat.upper()] = prediccion
-            detalles_calculo[mat.upper()] = detalles
+            Cada predicción se calcula usando la fórmula matemática:
             
-        except Exception as e:
-            errores.append(f"Error al predecir {mat}: {str(e)}")
-    
-    # Mostrar errores si los hay
-    if errores:
-        for error in errores:
-            st.warning(f"⚠️ {error}")
-    
-    if not resultados:
-        st.error("❌ No se pudieron calcular predicciones. Revise el archivo de coeficientes.")
-        st.stop()
-
-    # 3️⃣ Mostrar confirmación y resumen
-    st.success("✅ ¡Datos capturados y procesados exitosamente!")
-
-    # ---- Resumen de predicciones
-    st.subheader("📈 Predicción por Materia")
-    pred_df = (
-        pd.Series(resultados)
-        .rename_axis("Materia")
-        .reset_index(name="Predicción")
-        .sort_values("Materia")
-    )
-    # Redondear predicciones para mejor visualización
-    pred_df["Predicción"] = pred_df["Predicción"].round(4)
-    st.dataframe(pred_df, use_container_width=True)
-    
-    # ---- Explicación de cómo se calculan las predicciones
-    with st.expander("🧮 ¿Cómo se calculan estas predicciones?"):
-        st.markdown("""
-        ### 📊 **Método de Cálculo: Regresión Lineal**
-        
-        Cada predicción se calcula usando la fórmula matemática:
-        
-        **Predicción = Constante + (Coef₁ × Variable₁) + (Coef₂ × Variable₂) + ... + (Coefₙ × Variableₙ)**
-        
-        Donde:
-        - **Constante (_cons)**: Valor base del modelo
-        - **Coeficientes**: Pesos que determinan la importancia de cada variable
-        - **Variables**: Los datos que ingresaste del estudiante
-        
-        ### 🎯 **Ejemplo de cálculo para una materia:**
-        ```
-        Predicción MATH = _cons + 
-                         (coef_estu_mujer × estu_mujer) +
-                         (coef_edad_grado × edad_grado) +
-                         (coef_human_langs_08 × human_langs_08) +
-                         ... (todas las demás variables)
-        ```
-        """)
-    
-    # ---- Interpretación de resultados
-    with st.expander("📋 Interpretación de los Resultados"):
-        st.markdown("### 🎯 **¿Qué significan estos números?**")
-        
-        for materia, valor in sorted(resultados.items()):
-            if valor > 0.5:
-                interpretacion = "🟢 **Por encima del promedio** - El estudiante tiene un buen desempeño esperado"
-                emoji = "✅"
-            elif valor > 0:
-                interpretacion = "🟡 **Ligeramente por encima del promedio** - Desempeño esperado moderadamente bueno"
-                emoji = "📈"
-            elif valor > -0.5:
-                interpretacion = "🟠 **Ligeramente por debajo del promedio** - Puede necesitar apoyo adicional"
-                emoji = "⚠️"
-            else:
-                interpretacion = "🔴 **Por debajo del promedio** - Requiere atención y apoyo significativo"
-                emoji = "📉"
+            **Predicción = Constante + (Coef₁ × Variable₁) + (Coef₂ × Variable₂) + ... + (Coefₙ × Variableₙ)**
             
-            st.markdown(f"""
-            **{emoji} {materia}**: `{valor:.4f}`  
-            {interpretacion}
+            Donde:
+            - **Constante (_cons)**: Valor base del modelo
+            - **Coeficientes**: Pesos que determinan la importancia de cada variable
+            - **Variables**: Los datos que ingresaste del estudiante
+            
+            ### 🎯 **Ejemplo de cálculo para una materia:**
+            ```
+            Predicción MATH = _cons + 
+                             (coef_estu_mujer × estu_mujer) +
+                             (coef_edad_grado × edad_grado) +
+                             (coef_human_langs_08 × human_langs_08) +
+                             ... (todas las demás variables)
+            ```
             """)
         
-        st.markdown("""
-        ---
-        ### 📏 **Escala de Interpretación:**
-        - **Valores positivos**: Por encima del promedio de la población de referencia
-        - **Valores negativos**: Por debajo del promedio de la población de referencia  
-        - **Cerca de 0**: Cercano al promedio de la población de referencia
-        - **Mayor valor absoluto**: Mayor diferencia respecto al promedio
-        
-        ### 🔍 **Factores que más influyen:**
-        - Promedios de 8° grado (especialmente en áreas relacionadas)
-        - Percentiles NWEA MAP
-        - Edad del estudiante
-        - Nivel educativo de los padres
-        - Faltas disciplinarias
-        """)
-    
-    # ---- Cálculos detallados por materia
-    with st.expander("🔬 Ver Cálculos Paso a Paso por Materia"):
-        st.markdown("### 🧮 **Detalles de los Cálculos**")
-        st.markdown("*Solo se muestran las contribuciones significativas (> 0.001)*")
-        
-        for materia in sorted(resultados.keys()):
-            with st.container():
-                st.markdown(f"#### 📚 **{materia}** (Resultado: {resultados[materia]:.6f})")
-                
-                detalles = detalles_calculo.get(materia, [])
-                if detalles:
-                    for detalle in detalles[:10]:  # Mostrar solo las primeras 10 contribuciones
-                        st.code(detalle)
-                    
-                    if len(detalles) > 10:
-                        st.caption(f"... y {len(detalles) - 10} términos adicionales")
+        # ---- Interpretación de resultados
+        with st.expander("📋 Interpretación de los Resultados"):
+            st.markdown("### 🎯 **¿Qué significan estos números?**")
+            
+            for materia, valor in sorted(resultados.items()):
+                if valor > 0.5:
+                    interpretacion = "🟢 **Por encima del promedio** - El estudiante tiene un buen desempeño esperado"
+                    emoji = "✅"
+                elif valor > 0:
+                    interpretacion = "🟡 **Ligeramente por encima del promedio** - Desempeño esperado moderadamente bueno"
+                    emoji = "📈"
+                elif valor > -0.5:
+                    interpretacion = "🟠 **Ligeramente por debajo del promedio** - Puede necesitar apoyo adicional"
+                    emoji = "⚠️"
                 else:
-                    st.error("No se pudieron obtener los detalles del cálculo")
+                    interpretacion = "🔴 **Por debajo del promedio** - Requiere atención y apoyo significativo"
+                    emoji = "📉"
+                
+                st.markdown(f"""
+                **{emoji} {materia}**: `{valor:.4f}`  
+                {interpretacion}
+                """)
+            
+            st.markdown("""
+            ---
+            ### 📏 **Escala de Interpretación:**
+            - **Valores positivos**: Por encima del promedio de la población de referencia
+            - **Valores negativos**: Por debajo del promedio de la población de referencia  
+            - **Cerca de 0**: Cercano al promedio de la población de referencia
+            - **Mayor valor absoluto**: Mayor diferencia respecto al promedio
+            
+            ### 🔍 **Factores que más influyen:**
+            - Promedios de 8° grado (especialmente en áreas relacionadas)
+            - Percentiles NWEA MAP
+            - Edad del estudiante
+            - Nivel educativo de los padres
+            - Faltas disciplinarias
+            """)
+        
+        # ---- Cálculos detallados por materia
+        with st.expander("🔬 Ver Cálculos Paso a Paso por Materia"):
+            st.markdown("### 🧮 **Detalles de los Cálculos**")
+            st.markdown("*Solo se muestran las contribuciones significativas (> 0.001)*")
+            
+            for materia in sorted(resultados.keys()):
+                with st.container():
+                    st.markdown(f"#### 📚 **{materia}** (Resultado: {resultados[materia]:.6f})")
                     
-                st.markdown("---")
-    
-    # ---- Recomendaciones basadas en resultados
-    with st.expander("💡 Recomendaciones Pedagógicas"):
-        st.markdown("### 🎯 **Recomendaciones basadas en las predicciones:**")
+                    detalles = detalles_calculo.get(materia, [])
+                    if detalles:
+                        for detalle in detalles[:10]:  # Mostrar solo las primeras 10 contribuciones
+                            st.code(detalle)
+                        
+                        if len(detalles) > 10:
+                            st.caption(f"... y {len(detalles) - 10} términos adicionales")
+                    else:
+                        st.error("No se pudieron obtener los detalles del cálculo")
+                        
+                    st.markdown("---")
         
-        # Identificar fortalezas y áreas de mejora
-        materias_ordenadas = sorted(resultados.items(), key=lambda x: x[1], reverse=True)
-        mejor_materia = materias_ordenadas[0]
-        peor_materia = materias_ordenadas[-1]
-        
-        st.markdown(f"""
-        **🌟 Fortaleza principal:** {mejor_materia[0]} (predicción: {mejor_materia[1]:.3f})
-        - Aprovechar esta fortaleza para motivar al estudiante
-        - Usar estrategias exitosas de esta área en otras materias
-        
-        **🎯 Área de mayor atención:** {peor_materia[0]} (predicción: {peor_materia[1]:.3f})
-        - Implementar estrategias de apoyo específicas
-        - Considerar tutoría adicional o recursos complementarios
-        """)
-        
-        # Recomendaciones generales
-        promedio_predicciones = sum(resultados.values()) / len(resultados)
-        if promedio_predicciones > 0.3:
-            st.success("✅ **Perfil general positivo:** El estudiante muestra un buen potencial académico general.")
-        elif promedio_predicciones > -0.3:
-            st.info("📊 **Perfil equilibrado:** El estudiante tiene un desempeño esperado cercano al promedio.")
-        else:
-            st.warning("⚠️ **Necesita apoyo:** Se recomienda implementar estrategias de apoyo integral.")
+        # ---- Recomendaciones basadas en resultados
+        with st.expander("💡 Recomendaciones Pedagógicas"):
+            st.markdown("### 🎯 **Recomendaciones basadas en las predicciones:**")
             
-        st.markdown(f"**Promedio de predicciones:** {promedio_predicciones:.3f}")
+            # Identificar fortalezas y áreas de mejora
+            materias_ordenadas = sorted(resultados.items(), key=lambda x: x[1], reverse=True)
+            mejor_materia = materias_ordenadas[0]
+            peor_materia = materias_ordenadas[-1]
             
-    st.markdown("---")
+            st.markdown(f"""
+            **🌟 Fortaleza principal:** {mejor_materia[0]} (predicción: {mejor_materia[1]:.3f})
+            - Aprovechar esta fortaleza para motivar al estudiante
+            - Usar estrategias exitosas de esta área en otras materias
+            
+            **🎯 Área de mayor atención:** {peor_materia[0]} (predicción: {peor_materia[1]:.3f})
+            - Implementar estrategias de apoyo específicas
+            - Considerar tutoría adicional o recursos complementarios
+            """)
+            
+            # Recomendaciones generales
+            promedio_predicciones = sum(resultados.values()) / len(resultados)
+            if promedio_predicciones > 0.3:
+                st.success("✅ **Perfil general positivo:** El estudiante muestra un buen potencial académico general.")
+            elif promedio_predicciones > -0.3:
+                st.info("📊 **Perfil equilibrado:** El estudiante tiene un desempeño esperado cercano al promedio.")
+            else:
+                st.warning("⚠️ **Necesita apoyo:** Se recomienda implementar estrategias de apoyo integral.")
+                
+            st.markdown(f"**Promedio de predicciones:** {promedio_predicciones:.3f}")
+                
+        st.markdown("---")
 
-    # ---- Tabla con los datos capturados
-    st.subheader("📋 Resumen de Datos Capturados")
-    df_resumen = (
-        pd.DataFrame({"Variable": list(datos.keys()), "Valor": list(datos.values())})
-        .set_index("Variable")
-    )
-    st.dataframe(df_resumen, use_container_width=True)
+        # ---- Tabla con los datos capturados
+        st.subheader("📋 Resumen de Datos Capturados")
+        df_resumen = (
+            pd.DataFrame({"Variable": list(datos.keys()), "Valor": list(datos.values())})
+            .set_index("Variable")
+        )
+        st.dataframe(df_resumen, use_container_width=True)
 
-    # ---- Descargar datos + predicciones
-    st.markdown("---")
-    out = {**datos, **{f"pred_{k.lower()}": v for k, v in resultados.items()}}
-    csv = pd.DataFrame([out]).to_csv(index=False)
-    st.download_button(
-        "📥 Descargar todo como CSV",
-        data=csv,
-        file_name=f"datos_estudiante_{id_estudiante}.csv",
-        mime="text/csv",
-    )
+        # ---- Descargar datos + predicciones
+        st.markdown("---")
+        out = {**datos, **{f"pred_{k.lower()}": v for k, v in resultados.items()}}
+        csv = pd.DataFrame([out]).to_csv(index=False)
+        st.download_button(
+            "📥 Descargar todo como CSV",
+            data=csv,
+            file_name=f"datos_estudiante_{id_estudiante}.csv",
+            mime="text/csv",
+        )
 
 # --------------------------------------------------
 # Página 2: Análisis Masivo
