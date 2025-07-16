@@ -5,6 +5,7 @@ from pathlib import Path
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from scipy.stats import norm
 
 # 📂 Ruta del archivo de coeficientes
 MODELOS_XLSX = Path(__file__).with_name("Coeficientes_modelos.xlsx")
@@ -12,7 +13,7 @@ MODELOS_XLSX = Path(__file__).with_name("Coeficientes_modelos.xlsx")
 # --------------------------------------------------
 # Utilidades
 # --------------------------------------------------
-@st.cache_data
+# @st.cache_data
 def cargar_modelos(path: Path) -> dict[str, pd.Series]:
     """
     Devuelve un diccionario:
@@ -64,6 +65,9 @@ def predecir_con_detalles(modelo: pd.Series, datos: dict[str, float], nombre_mat
             var_val = float(datos.get(var, 0))
             contribucion = coef_num * var_val
             suma += contribucion
+            # Probit: probability = Φ(suma), where Φ is the standard normal CDF
+            probabilidad = norm.cdf(suma)
+
             
             if abs(contribucion) > 0.001:  # Solo mostrar contribuciones significativas
                 detalles.append(f"{var}: {coef_num:.6f} × {var_val} = {contribucion:.6f}")
@@ -72,7 +76,31 @@ def predecir_con_detalles(modelo: pd.Series, datos: dict[str, float], nombre_mat
             detalles.append(f"{var}: Error - {e}")
             continue
     
-    return float(suma), detalles
+    return float(probabilidad), detalles
+
+def predecir_probit(modelo: pd.Series, datos: dict[str, float]) -> float:
+    """
+    modelos Probit
+    """
+    suma = 0.0
+    try:
+        suma = float(modelo.get("_cons", 0.0))
+    except (ValueError, TypeError):
+        suma = 0.0
+
+    for var, coef in modelo.items():
+        if var == "_cons":
+            continue
+        try:
+            coef_num = float(coef)
+            var_val = float(datos.get(var, 0))
+            suma += coef_num * var_val
+        except (ValueError, TypeError):
+            continue
+
+    # Probit: probability = Φ(suma), where Φ is the standard normal CDF
+    probabilidad = norm.cdf(suma)
+    return float(probabilidad)
 
 
 def predecir(modelo: pd.Series, datos: dict[str, float]) -> float:
@@ -123,13 +151,13 @@ except Exception as e:
 # Interfaz Principal
 # --------------------------------------------------
 st.set_page_config(
-    page_title="Sistema de Predicción Académica",
+    page_title="Sistema de Predicción",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("📊 Sistema de Predicción Académica - Colegio Parrish")
+st.title("📊 Sistema de Predicción - Colegio Parrish")
 st.markdown("---")
 
 # Crear sidebar para navegación
@@ -193,45 +221,36 @@ if pagina == "📝 Estudiante Individual":
         with col2:
             edad_grado = st.number_input(
                 "Edad del estudiante a la fecha de grado",
-                min_value=10.0,
-                max_value=25.0,
-                value=17.0,
-                step=0.1,
-                help="Edad del estudiante cuando se graduó",
+                min_value=10,
+                max_value=35,
+                value=17,
+                step=1,
+                help="Edad estimada del estudiante al momento de grado",
             )
 
         # 🎓 Educación padres
         st.subheader("🎓 Educación Máxima de los Padres/Madres")
-        st.markdown("*Marque 1 si alguno de los padres alcanzó este nivel educativo*")
-        col1, col2 = st.columns(2)
-        with col1:
-            educ_max_padremadre1 = st.selectbox(
+        st.markdown('''Seleccione el *máximo nivel educativo alcanzado* entre los padres del estudiante.''')
+        
+        educ_max_total = st.radio(
+            "¿Qué nivel educativo alcanzó el padre o la madre con mayor educación?",
+            options=[
                 "Hasta bachillerato/secundaria completa",
-                options=[0, 1],
-                format_func=lambda x: "Sí" if x == 1 else "No",
-            )
-            educ_max_padremadre2 = st.selectbox(
                 "Técnica o tecnológica (incompleta o completa)",
-                options=[0, 1],
-                format_func=lambda x: "Sí" if x == 1 else "No",
-            )
-            educ_max_padremadre3 = st.selectbox(
                 "Educación profesional incompleta",
-                options=[0, 1],
-                format_func=lambda x: "Sí" if x == 1 else "No",
-            )
-        with col2:
-            educ_max_padremadre4 = st.selectbox(
                 "Educación profesional completa",
-                options=[0, 1],
-                format_func=lambda x: "Sí" if x == 1 else "No",
-            )
-            educ_max_padremadre5 = st.selectbox(
-                "Postgrado",
-                options=[0, 1],
-                format_func=lambda x: "Sí" if x == 1 else "No",
-            )
-
+                "Postgrado"
+            ],
+        )
+        
+        # Convertir la selección del radio button a variables binarias
+        educ_max_padremadre1 = 1 if educ_max_total == "Hasta bachillerato/secundaria completa" else 0
+        educ_max_padremadre2 = 1 if educ_max_total == "Técnica o tecnológica (incompleta o completa)" else 0
+        educ_max_padremadre3 = 1 if educ_max_total == "Educación profesional incompleta" else 0
+        educ_max_padremadre4 = 1 if educ_max_total == "Educación profesional completa" else 0
+        educ_max_padremadre5 = 1 if educ_max_total == "Postgrado" else 0
+        
+    
         # ⚠️ Faltas
         st.subheader("⚠️ Comportamiento")
         total_faltas_disc = st.number_input(
@@ -275,27 +294,32 @@ if pagina == "📝 Estudiante Individual":
                 value=85.0,
                 step=0.1,
             )
-
-        # 📊 NWEA
-        st.subheader("📊 Pruebas NWEA MAP (Grados 9° y 10°)")
-        st.markdown("*Percentiles obtenidos en las pruebas estandarizadas NWEA MAP*")
-        col1, col2 = st.columns(2)
-        with col1:
-            nwea_math_perc = st.number_input(
-                "Percentil en Matemáticas NWEA MAP",
-                min_value=1.0,
-                max_value=99.0,
-                value=50.0,
-                step=0.1,
-            )
-        with col2:
-            nwea_reading_perc = st.number_input(
-                "Percentil en Comprensión Lectora NWEA MAP",
-                min_value=1.0,
-                max_value=99.0,
-                value=50.0,
-                step=0.1,
-            )
+            
+        if modulo == 24:
+            # 📊 NWEA
+            st.subheader("📊 Pruebas NWEA MAP (Grados 9° y 10°)")
+            st.markdown("*Percentiles obtenidos en las pruebas estandarizadas NWEA MAP*")
+            col1, col2 = st.columns(2)
+            with col1:
+                nwea_math_perc = st.number_input(
+                    "Percentil en Matemáticas NWEA MAP",
+                    min_value=1.0,
+                    max_value=99.0,
+                    value=50.0,
+                    step=0.1,
+                )
+            with col2:
+                nwea_reading_perc = st.number_input(
+                    "Percentil en Comprensión Lectora NWEA MAP",
+                    min_value=1.0,
+                    max_value=99.0,
+                    value=50.0,
+                    step=0.1,
+                )
+        else:
+            # Para grados 8° y 9°, no se usa NWEA
+            nwea_math_perc = 50.0
+            nwea_reading_perc = 50.0
 
         st.markdown("---")
         submitted = st.form_submit_button("🚀 Procesar Datos", use_container_width=True)
@@ -331,20 +355,20 @@ if pagina == "📝 Estudiante Individual":
         detalles_calculo = {}
         errores = []
         
-        for mat in materias:
+        for materia in materias:
             try:
-                hoja = f"s11_{mat}_mod{modulo}"
+                hoja = f"s11_{materia}_mod{modulo}"
                 if hoja not in MODELOS:
-                    errores.append(f"No se encontró el modelo para {mat} (hoja: {hoja})")
+                    errores.append(f"No se encontró el modelo para {materia} (hoja: {hoja})")
                     continue
                 
                 modelo = MODELOS[hoja]
-                prediccion, detalles = predecir_con_detalles(modelo, datos, mat)
-                resultados[mat.upper()] = prediccion
-                detalles_calculo[mat.upper()] = detalles
+                prediccion, detalles = predecir_con_detalles(modelo, datos, materia)
+                resultados[materia.upper()] = prediccion
+                detalles_calculo[materia.upper()] = detalles
                 
             except Exception as e:
-                errores.append(f"Error al predecir {mat}: {str(e)}")
+                errores.append(f"Error al predecir {materia}: {str(e)}")
         
         # Mostrar errores si los hay
         if errores:
@@ -364,8 +388,9 @@ if pagina == "📝 Estudiante Individual":
             pd.Series(resultados)
             .rename_axis("Materia")
             .reset_index(name="Predicción")
-            .sort_values("Materia")
         )
+        pred_df['Alto'] = pred_df['Predicción'] > 0.5
+        
         # Redondear predicciones para mejor visualización
         pred_df["Predicción"] = pred_df["Predicción"].round(4)
         st.dataframe(pred_df, use_container_width=True)
@@ -373,24 +398,25 @@ if pagina == "📝 Estudiante Individual":
         # ---- Explicación de cómo se calculan las predicciones
         with st.expander("🧮 ¿Cómo se calculan estas predicciones?"):
             st.markdown("""
-            ### 📊 **Método de Cálculo: Regresión Lineal**
+            ### 📊 **Método de Cálculo: Modelo Probit**
             
             Cada predicción se calcula usando la fórmula matemática:
             
-            **Predicción = Constante + (Coef₁ × Variable₁) + (Coef₂ × Variable₂) + ... + (Coefₙ × Variableₙ)**
+            **Predicción = G(Constante + (Coef₁ × Variable₁) + (Coef₂ × Variable₂) + ... + (Coefₙ × Variableₙ))**
             
             Donde:
+            - **G** es la función de distribución acumulativa de la normal estándar (Probit)
             - **Constante (_cons)**: Valor base del modelo
             - **Coeficientes**: Pesos que determinan la importancia de cada variable
             - **Variables**: Los datos que ingresaste del estudiante
             
             ### 🎯 **Ejemplo de cálculo para una materia:**
             ```
-            Predicción MATH = _cons + 
-                             (coef_estu_mujer × estu_mujer) +
-                             (coef_edad_grado × edad_grado) +
-                             (coef_human_langs_08 × human_langs_08) +
-                             ... (todas las demás variables)
+            Predicción MATH = G(_cons + 
+                            (coef_estu_mujer × estu_mujer) +
+                            (coef_edad_grado × edad_grado) +
+                            (coef_human_langs_08 × human_langs_08) +
+                            ... (todas las demás variables))
             ```
             """)
         
@@ -399,17 +425,17 @@ if pagina == "📝 Estudiante Individual":
             st.markdown("### 🎯 **¿Qué significan estos números?**")
             
             for materia, valor in sorted(resultados.items()):
-                if valor > 0.5:
-                    interpretacion = "🟢 **Por encima del promedio** - El estudiante tiene un buen desempeño esperado"
+                if valor > 0.7:
+                    interpretacion = "🟢 "
                     emoji = "✅"
-                elif valor > 0:
-                    interpretacion = "🟡 **Ligeramente por encima del promedio** - Desempeño esperado moderadamente bueno"
+                elif valor > 0.5:
+                    interpretacion = "🟡 "
                     emoji = "📈"
-                elif valor > -0.5:
-                    interpretacion = "🟠 **Ligeramente por debajo del promedio** - Puede necesitar apoyo adicional"
+                elif valor > 0.3:
+                    interpretacion = "🟠 "
                     emoji = "⚠️"
                 else:
-                    interpretacion = "🔴 **Por debajo del promedio** - Requiere atención y apoyo significativo"
+                    interpretacion = "🔴 "
                     emoji = "📉"
                 
                 st.markdown(f"""
@@ -420,17 +446,11 @@ if pagina == "📝 Estudiante Individual":
             st.markdown("""
             ---
             ### 📏 **Escala de Interpretación:**
-            - **Valores positivos**: Por encima del promedio de la población de referencia
-            - **Valores negativos**: Por debajo del promedio de la población de referencia  
-            - **Cerca de 0**: Cercano al promedio de la población de referencia
-            - **Mayor valor absoluto**: Mayor diferencia respecto al promedio
-            
-            ### 🔍 **Factores que más influyen:**
-            - Promedios de 8° grado (especialmente en áreas relacionadas)
-            - Percentiles NWEA MAP
-            - Edad del estudiante
-            - Nivel educativo de los padres
-            - Faltas disciplinarias
+            - 🟢 Alto potencial (predicción > 0.7 )
+            - 🟡 Potencial moderado (predicción > 0.5)
+            - 🟠 Potencial bajo (predicción > 0.3)
+            - 🔴 Necesita apoyo (predicción ≤ 0.3)
+    
             """)
         
         # ---- Cálculos detallados por materia
@@ -553,7 +573,7 @@ elif pagina == "📊 Análisis Masivo":
             modulo_masivo = 24
     
     with col2:
-        st.info(f"📊 **Usando modelos para módulo {modulo_masivo}**")
+        st.info(f"📊 **Usando modelos {modulo_masivo}**")
     
     # Upload del archivo
     uploaded_file = st.file_uploader(
@@ -565,7 +585,7 @@ elif pagina == "📊 Análisis Masivo":
     if uploaded_file is not None:
         try:
             # Cargar el archivo
-            df_estudiantes = pd.read_excel(uploaded_file)
+            df_estudiantes = pd.read_excel(uploaded_file, sheet_name="Data")
             
             st.success(f"✅ Archivo cargado exitosamente: {len(df_estudiantes)} estudiantes encontrados")
             
@@ -625,7 +645,7 @@ elif pagina == "📊 Análisis Masivo":
                                 hoja = f"s11_{mat}_mod{modulo_masivo}"
                                 if hoja in MODELOS:
                                     modelo = MODELOS[hoja]
-                                    prediccion = predecir(modelo, datos_estudiante)
+                                    prediccion = predecir_probit(modelo, datos_estudiante)
                                     predicciones_estudiante[f"pred_{mat}"] = prediccion
                                 else:
                                     predicciones_estudiante[f"pred_{mat}"] = np.nan
