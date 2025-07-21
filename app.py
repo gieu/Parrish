@@ -789,7 +789,7 @@ elif pagina == "📊 Análisis Masivo":
                     st.subheader("⚠️ Análisis de Factores de Riesgo")
                     
                     # Estudiantes con bajo rendimiento
-                    threshold = -0.5
+                    threshold = 0.5
                     materias_bajo = []
                     for materia in materias_pred:
                         if materia in df_completo.columns:
