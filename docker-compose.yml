@@ -1,0 +1,10 @@
+version: '2.4'
+
+services:
+  parrish:
+    container_name: parrish
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    ports:
+      - '8530:8501'
