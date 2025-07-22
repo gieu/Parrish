@@ -151,7 +151,7 @@ except Exception as e:
 # Interfaz Principal
 # --------------------------------------------------
 st.set_page_config(
-    page_title="Sistema de Predicción",
+    page_title="Sistema de Predicción Colegio Parrish",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
