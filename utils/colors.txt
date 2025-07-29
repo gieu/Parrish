@@ -1,0 +1,19 @@
+Verde Parrish
+#049735
+rgb(4, 151, 53)
+
+Verde oscuro
+#00541f
+rgb(0, 84, 31)
+
+Amarillo Parrish
+#f7c500
+rgb(247, 197, 0)
+
+Verde claro
+#6dab3c
+rgb(109, 171, 60)
+
+Morado Parrish
+#7f469c
+rgb(127, 70, 156)

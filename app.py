@@ -7,6 +7,277 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy.stats import norm
 
+# --------------------------------------------------
+# Configuración de colores y estilos
+# --------------------------------------------------
+def apply_custom_styles():
+    """Aplica los colores de marca Parrish al tema de Streamlit"""
+    st.markdown("""
+    <style>
+    /* Colores de marca Parrish */
+    :root {
+        --verde-parrish: #049735;
+        --verde-oscuro: #00541f;
+        --amarillo-parrish: #f7c500;
+        --verde-claro: #6dab3c;
+        --morado-parrish: #7f469c;
+    }
+    
+    /* Sidebar personalizado */
+    .css-1d391kg {
+        background-color: var(--verde-oscuro) !important;
+    }
+    
+    /* Títulos principales */
+    h1 {
+        color: var(--verde-parrish) !important;
+        font-weight: bold !important;
+    }
+    
+    h2 {
+        color: var(--verde-oscuro) !important;
+        font-weight: bold !important;
+    }
+    
+    h3 {
+        color: var(--verde-claro) !important;
+    }
+    
+    /* Botones principales */
+    .stButton > button {
+        background-color: var(--verde-parrish) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: var(--verde-oscuro) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 8px rgba(4, 151, 53, 0.3) !important;
+    }
+    
+    /* Botones de descarga */
+    .stDownloadButton > button {
+        background-color: var(--amarillo-parrish) !important;
+        color: var(--verde-oscuro) !important;
+        border: 2px solid var(--verde-parrish) !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        background-color: var(--verde-claro) !important;
+        color: white !important;
+    }
+    
+    /* Radio buttons */
+    .stRadio > div > label > div:first-child {
+        background-color: var(--verde-parrish) !important;
+    }
+    
+    /* Selectbox */
+    .stSelectbox > div > div > div {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Input fields */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input {
+        border-color: var(--verde-claro) !important;
+        border-radius: 8px !important;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus {
+        border-color: var(--verde-parrish) !important;
+        box-shadow: 0 0 5px rgba(4, 151, 53, 0.3) !important;
+    }
+    
+    /* Mensajes de éxito */
+    .stSuccess {
+        background-color: rgba(109, 171, 60, 0.1) !important;
+        border-left: 4px solid var(--verde-claro) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Mensajes de información */
+    .stInfo {
+        background-color: rgba(247, 197, 0, 0.1) !important;
+        border-left: 4px solid var(--amarillo-parrish) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Mensajes de advertencia */
+    .stWarning {
+        background-color: rgba(127, 70, 156, 0.1) !important;
+        border-left: 4px solid var(--morado-parrish) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Tablas */
+    .stDataFrame {
+        border: 2px solid var(--verde-claro) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Métricas */
+    div[data-testid="metric-container"] {
+        background-color: rgba(4, 151, 53, 0.05) !important;
+        border: 1px solid var(--verde-claro) !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 4px rgba(4, 151, 53, 0.1) !important;
+    }
+    
+    div[data-testid="metric-container"] > div {
+        color: var(--verde-oscuro) !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: rgba(4, 151, 53, 0.1) !important;
+        border-radius: 8px !important;
+        border: 1px solid var(--verde-claro) !important;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div {
+        background-color: var(--verde-parrish) !important;
+    }
+    
+    /* Formularios */
+    .stForm {
+        border: 2px solid var(--verde-claro) !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        background-color: rgba(109, 171, 60, 0.02) !important;
+    }
+    
+    /* Sidebar texto */
+    .css-1d391kg .stMarkdown {
+        color: black !important;
+    }
+    
+    .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {
+        color: var(--amarillo-parrish) !important;
+    }
+    
+    /* Form submit button especial */
+    .stForm .stButton > button {
+        background: linear-gradient(135deg, var(--verde-parrish), var(--verde-claro)) !important;
+        color: white !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        padding: 12px 24px !important;
+        border-radius: 10px !important;
+        border: none !important;
+        box-shadow: 0 4px 8px rgba(4, 151, 53, 0.3) !important;
+    }
+    
+    .stForm .stButton > button:hover {
+        background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-parrish)) !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 6px 12px rgba(4, 151, 53, 0.4) !important;
+    }
+    
+    /* Columnas con bordes */
+    .element-container {
+        border-radius: 8px !important;
+    }
+    
+    /* Divider personalizado */
+    hr {
+        border-color: var(--verde-claro) !important;
+        border-width: 2px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+def get_parrish_colors():
+    """Retorna los colores de marca Parrish para uso en gráficos"""
+    return {
+        'primary': '#049735',      # Verde Parrish
+        'secondary': '#00541f',    # Verde oscuro
+        'accent': '#f7c500',       # Amarillo Parrish
+        'success': '#6dab3c',      # Verde claro
+        'info': '#7f469c',         # Morado Parrish
+        'palette': ['#049735', '#6dab3c', '#f7c500', '#7f469c', '#00541f']
+    }
+
+def configure_plotly_theme():
+    """Configura el tema de plotly con los colores de marca"""
+    colors = get_parrish_colors()
+    
+    # Configurar template personalizado
+    import plotly.io as pio
+    pio.templates["parrish"] = go.layout.Template(
+        layout=go.Layout(
+            colorway=colors['palette'],
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color=colors['secondary'], size=12),
+            title=dict(font=dict(color=colors['primary'], size=16, family="Arial Black")),
+            xaxis=dict(
+                gridcolor='rgba(109, 171, 60, 0.3)',
+                linecolor=colors['success'],
+                tickfont=dict(color=colors['secondary'])
+            ),
+            yaxis=dict(
+                gridcolor='rgba(109, 171, 60, 0.3)',
+                linecolor=colors['success'],
+                tickfont=dict(color=colors['secondary'])
+            )
+        )
+    )
+    pio.templates.default = "parrish"
+
+def create_colored_header(text, color_key='primary', level=1):
+    """Crea un header con colores personalizados"""
+    colors = get_parrish_colors()
+    color = colors.get(color_key, colors['primary'])
+    
+    if level == 1:
+        return f'<h1 style="color: {color}; font-weight: bold; margin-bottom: 0;">{text}</h1>'
+    elif level == 2:
+        return f'<h2 style="color: {color}; font-weight: bold; margin-bottom: 0;">{text}</h2>'
+    elif level == 3:
+        return f'<h3 style="color: {color}; font-weight: bold; margin-bottom: 0;">{text}</h3>'
+    else:
+        return f'<h4 style="color: {color}; font-weight: bold; margin-bottom: 0;">{text}</h4>'
+
+def create_success_box(text):
+    """Crea una caja de éxito personalizada"""
+    return f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(109, 171, 60, 0.1), rgba(4, 151, 53, 0.05));
+        border-left: 4px solid #6dab3c;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(109, 171, 60, 0.2);
+    ">
+        <p style="color: #00541f; margin: 0; font-weight: 500;">✅ {text}</p>
+    </div>
+    """
+
+def create_info_box(text):
+    """Crea una caja de información personalizada"""
+    return f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 197, 0, 0.1), rgba(247, 197, 0, 0.05));
+        border-left: 4px solid #f7c500;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(247, 197, 0, 0.2);
+    ">
+        <p style="color: #00541f; margin: 0; font-weight: 500;">ℹ️ {text}</p>
+    </div>
+    """
+
 # 📂 Ruta del archivo de coeficientes
 MODELOS_XLSX = Path(__file__).with_name("Coeficientes_modelos.xlsx")
 
@@ -157,11 +428,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.title("📊 Sistema de Predicción - Colegio Parrish")
+# Aplicar estilos personalizados de marca Parrish
+apply_custom_styles()
+
+# Configurar tema de gráficos Plotly
+configure_plotly_theme()
+
+## Add a banner from utils/banner.png
+st.image("utils/banner.png", use_container_width=True)
 st.markdown("---")
 
 # Crear sidebar para navegación
-st.sidebar.title("🧭 Navegación")
+st.sidebar.markdown("""
+<div style="text-align: center; padding: 20px 0;">
+    <h1 style="color: #f7c500; font-size: 24px; margin: 0;">🧭 Navegación</h1>
+</div>
+""", unsafe_allow_html=True)
+
 pagina = st.sidebar.radio(
     "Seleccione una opción:",
     ["📝 Estudiante Individual", "📊 Análisis Masivo"]
@@ -169,17 +452,21 @@ pagina = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
-### 📋 **Acerca del Sistema**
-- **Página Individual**: Analiza un estudiante específico
-- **Análisis Masivo**: Procesa múltiples estudiantes desde Excel
-""")
+<div style="background: rgba(247, 197, 0, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #f7c500;">
+    <h3 style="color: #f7c500; margin-top: 0;">📋 Acerca del Sistema</h3>
+    <ul style="color: black; margin-bottom: 0;">
+        <li><strong>Página Individual</strong>: Analiza un estudiante específico</li>
+        <li><strong>Análisis Masivo</strong>: Procesa múltiples estudiantes desde Excel</li>
+    </ul>
+</div>
+""", unsafe_allow_html=True)
 
 # --------------------------------------------------
 # Página 1: Estudiante Individual
 # --------------------------------------------------
 if pagina == "📝 Estudiante Individual":
 
-    st.header("📝 Análisis Individual de Estudiante")
+    st.markdown(create_colored_header("📝 Análisis Individual de Estudiante", 'primary', 1), unsafe_allow_html=True)
     st.markdown("Ingrese los datos de un estudiante para obtener predicciones personalizadas.")
     
     # ---------- Selector de grado ----------
@@ -196,7 +483,7 @@ if pagina == "📝 Estudiante Individual":
         modulo = 24
     st.markdown("---")
 
-    st.subheader("Información del Estudiante")
+    st.markdown(create_colored_header("Información del Estudiante", 'secondary', 2), unsafe_allow_html=True)
 
     # ---------- Formulario ----------
     with st.form("formulario_estudiante"):
@@ -380,20 +667,40 @@ if pagina == "📝 Estudiante Individual":
             st.stop()
 
         # 3️⃣ Mostrar confirmación y resumen
-        st.success("✅ ¡Datos capturados y procesados exitosamente!")
+        st.markdown(create_success_box("¡Datos capturados y procesados exitosamente!"), unsafe_allow_html=True)
 
         # ---- Resumen de predicciones
         st.subheader("📈 Predicción por Materia")
-        pred_df = (
-            pd.Series(resultados)
-            .rename_axis("Materia")
-            .reset_index(name="Predicción")
-        )
-        pred_df['Alto'] = pred_df['Predicción'] > 0.5
         
-        # Redondear predicciones para mejor visualización
-        pred_df["Predicción"] = pred_df["Predicción"].round(4)
-        st.dataframe(pred_df, use_container_width=True)
+        for materia, valor in sorted(resultados.items()):
+                if valor > 0.7:
+                    interpretacion = "🟢 "
+                    emoji = "✅"
+                elif valor > 0.5:
+                    interpretacion = "🟡 "
+                    emoji = "📈"
+                elif valor > 0.3:
+                    interpretacion = "🟠 "
+                    emoji = "⚠️"
+                else:
+                    interpretacion = "🔴 "
+                    emoji = "📉"
+                
+                st.markdown(f"""
+                **{emoji} {materia}**: {interpretacion} `{valor:.2f}`  
+                
+                """)
+            
+        st.markdown("""
+            ---
+            ### 📏 **Escala de Interpretación:**
+            - 🟢 Alto potencial (predicción > 0.7 )
+            - 🟡 Potencial moderado (predicción > 0.5)
+            - 🟠 Potencial bajo (predicción > 0.3)
+            - 🔴 Necesita apoyo (predicción ≤ 0.3)
+    
+            """)
+
         
         # ---- Explicación de cómo se calculan las predicciones
         with st.expander("🧮 ¿Cómo se calculan estas predicciones?"):
@@ -421,37 +728,18 @@ if pagina == "📝 Estudiante Individual":
             """)
         
         # ---- Interpretación de resultados
-        with st.expander("📋 Interpretación de los Resultados"):
-            st.markdown("### 🎯 **¿Qué significan estos números?**")
+        with st.expander("📋 Descarga de resultados"):
+            pred_df = (
+                pd.Series(resultados)
+                .rename_axis("Materia")
+                .reset_index(name="Predicción")
+            )
+            pred_df['Alto'] = pred_df['Predicción'] > 0.5
             
-            for materia, valor in sorted(resultados.items()):
-                if valor > 0.7:
-                    interpretacion = "🟢 "
-                    emoji = "✅"
-                elif valor > 0.5:
-                    interpretacion = "🟡 "
-                    emoji = "📈"
-                elif valor > 0.3:
-                    interpretacion = "🟠 "
-                    emoji = "⚠️"
-                else:
-                    interpretacion = "🔴 "
-                    emoji = "📉"
-                
-                st.markdown(f"""
-                **{emoji} {materia}**: `{valor:.4f}`  
-                {interpretacion}
-                """)
-            
-            st.markdown("""
-            ---
-            ### 📏 **Escala de Interpretación:**
-            - 🟢 Alto potencial (predicción > 0.7 )
-            - 🟡 Potencial moderado (predicción > 0.5)
-            - 🟠 Potencial bajo (predicción > 0.3)
-            - 🔴 Necesita apoyo (predicción ≤ 0.3)
-    
-            """)
+            # Redondear predicciones para mejor visualización
+            pred_df["Predicción"] = pred_df["Predicción"].round(2)
+            st.dataframe(pred_df, use_container_width=True)
+           
         
         # ---- Cálculos detallados por materia
         with st.expander("🔬 Ver Cálculos Paso a Paso por Materia"):
@@ -529,7 +817,7 @@ if pagina == "📝 Estudiante Individual":
 # Página 2: Análisis Masivo
 # --------------------------------------------------
 elif pagina == "📊 Análisis Masivo":
-    st.header("📊 Análisis Masivo de Estudiantes")
+    st.markdown(create_colored_header("📊 Análisis Masivo de Estudiantes", 'primary', 1), unsafe_allow_html=True)
     st.markdown("Suba un archivo Excel con datos de múltiples estudiantes para análisis estadístico completo.")
     
     # Instrucciones del formato
@@ -740,20 +1028,7 @@ elif pagina == "📊 Análisis Masivo":
                     )
                     st.plotly_chart(fig_dist, use_container_width=True)
                     
-                    # Gráfico de correlaciones
-                    if len(materias_pred) > 1:
-                        materias_disponibles = [mat for mat in materias_pred if mat in df_completo.columns]
-                        if len(materias_disponibles) > 1:
-                            corr_matrix = df_completo[materias_disponibles].corr()
-                            
-                            fig_corr = px.imshow(
-                                corr_matrix,
-                                title="Matriz de Correlación entre Predicciones",
-                                color_continuous_scale="RdBu_r",
-                                aspect="auto"
-                            )
-                            fig_corr.update_layout(height=500)
-                            st.plotly_chart(fig_corr, use_container_width=True)
+  
                     
                     # Gráfico de rendimiento por género
                     if 'estu_mujer' in df_completo.columns:
