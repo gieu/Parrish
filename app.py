@@ -25,7 +25,7 @@ def apply_custom_styles():
     
     /* Sidebar personalizado */
     .css-1d391kg {
-        background-color: var(--verde-oscuro) !important;
+        background-color: #f5f5f5 !important;
     }
     
     /* Títulos principales */
@@ -78,9 +78,100 @@ def apply_custom_styles():
         background-color: var(--verde-parrish) !important;
     }
     
+    /* Radio button selected state */
+    .stRadio > div > label > div[data-baseweb="radio"] > div:first-child {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    .stRadio > div > label > div[aria-checked="true"] > div:first-child {
+        background-color: var(--verde-parrish) !important;
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Checkbox styling */
+    .stCheckbox > label > span:first-child {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    .stCheckbox > label > span[aria-checked="true"]:first-child {
+        background-color: var(--verde-parrish) !important;
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Slider styling */
+    .stSlider > div > div > div > div {
+        background-color: var(--verde-parrish) !important;
+    }
+    
+    .stSlider > div > div > div > div > div {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Multiselect styling */
+    .stMultiSelect > div > div > div > div {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    .stMultiSelect span[data-baseweb="tag"] {
+        background-color: var(--verde-parrish) !important;
+        color: white !important;
+    }
+    
     /* Selectbox */
     .stSelectbox > div > div > div {
         border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Selectbox dropdown styling */
+    .stSelectbox > div > div > div > div:hover {
+        border-color: var(--verde-parrish) !important;
+    }
+    
+    /* Selectbox selected option */
+    div[data-baseweb="select"] > div {
+        border-color: var(--verde-claro) !important;
+    }
+    
+    /* Links */
+    a {
+        color: var(--verde-parrish) !important;
+    }
+    
+    a:hover {
+        color: var(--verde-oscuro) !important;
+    }
+    
+    /* Spinner/Loading */
+    .stSpinner > div {
+        border-top-color: var(--verde-parrish) !important;
+    }
+    
+    /* File uploader */
+    .stFileUploader section button {
+        background-color: var(--verde-parrish) !important;
+        border-color: var(--verde-parrish) !important;
+        color: white !important;
+    }
+    
+    .stFileUploader section button:hover {
+        background-color: var(--verde-oscuro) !important;
+        border-color: var(--verde-oscuro) !important;
+    }
+    
+    /* Tab styling */
+    .stTabs > div > div > div > div {
+        border-bottom-color: var(--verde-parrish) !important;
+    }
+    
+    .stTabs > div > div > div > div > button[aria-selected="true"] {
+        border-bottom-color: var(--verde-parrish) !important;
+        color: var(--verde-parrish) !important;
+    }
+    
+    /* Number input arrows */
+    .stNumberInput > div > div > input::-webkit-outer-spin-button,
+    .stNumberInput > div > div > input::-webkit-inner-spin-button {
+        color: var(--verde-parrish) !important;
     }
     
     /* Input fields */
@@ -148,21 +239,21 @@ def apply_custom_styles():
         background-color: var(--verde-parrish) !important;
     }
     
-    /* Formularios */
-    .stForm {
-        border: 2px solid var(--verde-claro) !important;
-        border-radius: 10px !important;
-        padding: 20px !important;
-        background-color: rgba(109, 171, 60, 0.02) !important;
-    }
+    # /* Formularios */
+    # .stForm {
+    #     border: 2px solid var(--verde-claro) !important;
+    #     border-radius: 10px !important;
+    #     padding: 20px !important;
+    #     background-color: #F4F4F4 !important;
+    # }
     
     /* Sidebar texto */
     .css-1d391kg .stMarkdown {
-        color: black !important;
+        color: #333333 !important;
     }
     
     .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {
-        color: var(--amarillo-parrish) !important;
+        color: var(--verde-oscuro) !important;
     }
     
     /* Form submit button especial */
@@ -425,7 +516,8 @@ st.set_page_config(
     page_title="Sistema de Predicción Colegio Parrish",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    
 )
 
 # Aplicar estilos personalizados de marca Parrish
@@ -441,7 +533,7 @@ st.markdown("---")
 # Crear sidebar para navegación
 st.sidebar.markdown("""
 <div style="text-align: left; padding: 20px 0;">
-    <h1 style="color: #f7c500; font-size: 24px; margin: 0;">Navegación</h1>
+    <h1 style="color: #00541f; font-size: 24px; margin: 0;">🧭 Navegación</h1>
 </div>
 """, unsafe_allow_html=True)
 
@@ -453,9 +545,9 @@ pagina = st.sidebar.radio(
 # st.sidebar.markdown("---")
 st.sidebar.markdown(" ")
 st.sidebar.markdown("""
-<div style="background: rgba(247, 197, 0, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #f7c500;">
-    <h3 style="color: #f7c500; margin-top: 0;">📋 Acerca del Sistema</h3>
-    <ul style="color: black; margin-bottom: 0;">
+<div style="background: rgba(4, 151, 53, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #049735;">
+    <h3 style="color: #00541f; margin-top: 0;">📋 Acerca del Sistema</h3>
+    <ul style="color: #333333; margin-bottom: 0;">
         <li><strong>Página Individual</strong>: Analiza un estudiante específico</li>
         <li><strong>Análisis Masivo</strong>: Procesa múltiples estudiantes desde Excel</li>
     </ul>
@@ -469,7 +561,7 @@ st.sidebar.markdown(" ")
 st.sidebar.markdown("---")
 st.sidebar.image("utils/img-footer.png", use_container_width=True)
 st.sidebar.markdown("""<div style="text-align: center; padding: 10px 0;">
-    <p style="color: #f7c500; font-size: 14px; margin: 0;">© 2025 Colegio Karl C. Parrish</p>
+    <p style="color: #00541f; font-size: 14px; margin: 0;">© 2025 Colegio Karl C. Parrish</p>
 </div>""", unsafe_allow_html=True)
 
 # --------------------------------------------------

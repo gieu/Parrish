@@ -1,0 +1,94 @@
+[theme]
+# Primary accent color - Verde Parrish
+primaryColor = "#049735"
+
+# Background color of the app - Clean white
+backgroundColor = "#ffffff"
+
+# Background color used for most interactive widgets - Light gray
+secondaryBackgroundColor = "#F4F4F4"
+
+# Color used for almost all text - Verde Oscuro for readability
+textColor = "#00541f"
+
+# Color used for all links - Verde Parrish
+linkColor = "#049735"
+
+# Whether or not links should be displayed with an underline.
+linkUnderline = true
+
+# Background color used for code blocks - Light green tint
+codeBackgroundColor = "#F4F4F4"
+
+
+# An array of colors to use for categorical chart data.
+#
+# This is a list of one or more color strings which are applied in order
+# to categorical data. These colors apply to Plotly, Altair, and
+# Vega-Lite charts.
+#
+# Invalid colors are skipped, and colors repeat cyclically if there are
+# more categories than colors. If no chart categorical colors are set,
+# Streamlit uses a default set of colors.
+#
+# Using Parrish brand colors
+chartCategoricalColors = [
+    "#049735", # Verde Parrish (primary)
+    "#6dab3c", # Verde Claro
+    "#f7c500", # Amarillo Parrish
+    "#7f469c", # Morado Parrish
+    "#00541f", # Verde Oscuro
+    "#8fbc4a", # Verde intermedio
+    "#fdd835", # Amarillo claro
+    "#9c5aa6", # Morado claro
+    "#267326", # Verde medio
+    "#e6a800", # Amarillo oscuro
+]
+
+# An array of ten colors to use for sequential or continuous chart data.
+#
+# The ten colors create a gradient color scale. These colors apply to
+# Plotly, Altair, and Vega-Lite charts.
+#
+# Invalid color strings are skipped. If there are not exactly ten
+# valid colors specified, Streamlit uses a default set of colors.
+#
+# Using Parrish green gradient from light to dark
+chartSequentialColors = [
+    "#f0f8f4", # Very light green
+    "#d4edd9", # Light green
+    "#b8e2bf", # Light-medium green  
+    "#9dd7a6", # Medium-light green
+    "#82cc8c", # Medium green
+    "#6dab3c", # Verde Claro (brand)
+    "#5a9030", # Medium-dark green
+    "#477524", # Dark-medium green
+    "#345a18", # Dark green
+    "#00541f", # Verde Oscuro (brand)
+]
+[theme.sidebar]
+
+# Primary accent color - Verde Parrish (same as main)
+primaryColor = "#049735"
+
+# Background color of the sidebar - Light gray to match our CSS
+backgroundColor = "#F4F4F4"
+
+# Background color used for most interactive widgets in sidebar
+secondaryBackgroundColor = "#ffffff"
+
+# Color used for almost all text in sidebar - Dark gray for contrast
+textColor = "#333333"
+
+# Color used for all links in sidebar - Verde Oscuro
+linkColor = "#00541f"
+
+# Whether or not links should be displayed with an underline.
+linkUnderline = true
+
+# Background color used for code blocks in sidebar
+codeBackgroundColor = "#e8f5e8"
+
+
+# Whether to show a border around input widgets.
+showWidgetBorder = true
