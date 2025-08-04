@@ -440,8 +440,8 @@ st.markdown("---")
 
 # Crear sidebar para navegación
 st.sidebar.markdown("""
-<div style="text-align: center; padding: 20px 0;">
-    <h1 style="color: #f7c500; font-size: 24px; margin: 0;">🧭 Navegación</h1>
+<div style="text-align: left; padding: 20px 0;">
+    <h1 style="color: #f7c500; font-size: 24px; margin: 0;">Navegación</h1>
 </div>
 """, unsafe_allow_html=True)
 
@@ -450,7 +450,8 @@ pagina = st.sidebar.radio(
     ["📝 Estudiante Individual", "📊 Análisis Masivo"]
 )
 
-st.sidebar.markdown("---")
+# st.sidebar.markdown("---")
+st.sidebar.markdown(" ")
 st.sidebar.markdown("""
 <div style="background: rgba(247, 197, 0, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #f7c500;">
     <h3 style="color: #f7c500; margin-top: 0;">📋 Acerca del Sistema</h3>
@@ -460,6 +461,16 @@ st.sidebar.markdown("""
     </ul>
 </div>
 """, unsafe_allow_html=True)
+
+## set footer image
+st.sidebar.markdown(" ")
+st.sidebar.markdown(" ")
+st.sidebar.markdown(" ")
+st.sidebar.markdown("---")
+st.sidebar.image("utils/img-footer.png", use_container_width=True)
+st.sidebar.markdown("""<div style="text-align: center; padding: 10px 0;">
+    <p style="color: #f7c500; font-size: 14px; margin: 0;">© 2025 Colegio Karl C. Parrish</p>
+</div>""", unsafe_allow_html=True)
 
 # --------------------------------------------------
 # Página 1: Estudiante Individual
