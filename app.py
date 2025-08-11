@@ -906,14 +906,14 @@ if pagina == ":material/person_search: Estudiante Individual":
 # --------------------------------------------------
 # Página 2: Análisis Masivo
 # --------------------------------------------------
-elif pagina == "📊 Análisis Masivo":
-    st.markdown(create_colored_header("📊 Análisis Masivo de Estudiantes", 'primary', 1), unsafe_allow_html=True)
+elif pagina == ":material/article_person: Análisis Masivo":
+    st.title(":material/article_person: Análisis Masivo de Estudiantes")
     st.markdown("Suba un archivo Excel con datos de múltiples estudiantes para análisis estadístico completo.")
     
     # Instrucciones del formato
-    with st.expander("📋 Formato del Archivo Excel"):
+    with st.expander(":material/article: Formato del Archivo Excel"):
         st.markdown("""
-        ### 📁 **Formato Requerido del Excel:**
+        ### **Formato Requerido del Excel:**
         
         El archivo debe contener las siguientes columnas exactamente:
         
@@ -937,25 +937,21 @@ elif pagina == "📊 Análisis Masivo":
         """)
     
     # Selector de grado para análisis masivo
-    col1, col2 = st.columns(2)
-    with col1:
-        grado_masivo = st.radio(
-            "Seleccione el grado de los estudiantes",
-            options=["8 o 9", "10 o 11"],
-            horizontal=True,
-            key="grado_masivo"
-        )
-        if grado_masivo == "8 o 9":
-            modulo_masivo = 14
-        else:
-            modulo_masivo = 24
-    
-    with col2:
-        st.info(f"📊 **Usando modelos {modulo_masivo}**")
+    grado_masivo = st.radio(
+        "Seleccione el grado de los estudiantes",
+        options=["9 o 10", "11"],
+        horizontal=True,
+        key="grado_masivo"
+    )
+    if grado_masivo == "9 o 10":
+        modulo_masivo = 14
+    else:
+        modulo_masivo = 24
+
     
     # Upload del archivo
     uploaded_file = st.file_uploader(
-        "📁 Seleccione el archivo Excel con los datos de estudiantes",
+        ":material/attachment: Seleccione el archivo Excel con los datos de estudiantes",
         type=['xlsx', 'xls'],
         help="El archivo debe contener todas las columnas requeridas"
     )
@@ -965,7 +961,7 @@ elif pagina == "📊 Análisis Masivo":
             # Cargar el archivo
             df_estudiantes = pd.read_excel(uploaded_file, sheet_name="Data")
             
-            st.success(f"✅ Archivo cargado exitosamente: {len(df_estudiantes)} estudiantes encontrados")
+            st.success(f"Archivo cargado exitosamente: {len(df_estudiantes)} estudiantes encontrados")
             
             # Verificar columnas requeridas
             columnas_requeridas = [
@@ -1047,7 +1043,7 @@ elif pagina == "📊 Análisis Masivo":
                     # ESTADÍSTICAS Y VISUALIZACIONES
                     # --------------------------------------------------
                     
-                    st.header("📊 Estadísticas Generales")
+                    st.header(":material/bar_chart_4_bars: Estadísticas Generales")
                     
                     # Métricas principales
                     col1, col2, col3, col4 = st.columns(4)
@@ -1064,7 +1060,7 @@ elif pagina == "📊 Análisis Masivo":
                         st.metric("Faltas Promedio", f"{faltas_promedio:.1f}")
                     
                     # Estadísticas de predicciones
-                    st.subheader("📈 Estadísticas de Predicciones")
+                    st.subheader(":material/finance_mode: Estadísticas de Predicciones")
                     
                     # Crear tabla de estadísticas
                     materias_pred = ['pred_lectura', 'pred_math', 'pred_soc', 'pred_cnat', 'pred_ingles', 'pred_global']
@@ -1090,9 +1086,9 @@ elif pagina == "📊 Análisis Masivo":
                     # --------------------------------------------------
                     # VISUALIZACIONES
                     # --------------------------------------------------
-                    
-                    st.subheader("📊 Visualizaciones")
-                    
+
+                    st.subheader(":material/analytics: Visualizaciones")
+
                     # Gráfico de distribución de predicciones
                     fig_dist = make_subplots(
                         rows=2, cols=3,
@@ -1122,7 +1118,7 @@ elif pagina == "📊 Análisis Masivo":
                     
                     # Gráfico de rendimiento por género
                     if 'estu_mujer' in df_completo.columns:
-                        st.subheader("👥 Análisis por Género")
+                        st.subheader(":material/groups_3: Análisis por Género")
                         
                         # Preparar datos para el gráfico
                         genero_data = []
@@ -1151,7 +1147,7 @@ elif pagina == "📊 Análisis Masivo":
                             st.plotly_chart(fig_genero, use_container_width=True)
                     
                     # Análisis de factores de riesgo
-                    st.subheader("⚠️ Análisis de Factores de Riesgo")
+                    st.subheader(":material/crisis_alert: Análisis de Factores de Riesgo")
                     
                     # Estudiantes con bajo rendimiento
                     threshold = 0.5
@@ -1185,7 +1181,7 @@ elif pagina == "📊 Análisis Masivo":
                     # DESCARGA DE RESULTADOS
                     # --------------------------------------------------
                     
-                    st.subheader("📥 Descargar Resultados")
+                    st.subheader(":material/browser_updated: Descargar Resultados")
                     
                     col1, col2 = st.columns(2)
                     
