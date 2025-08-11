@@ -531,22 +531,18 @@ st.image("utils/banner.png", use_container_width=True)
 st.markdown("---")
 
 # Crear sidebar para navegación
-st.sidebar.markdown("""
-<div style="text-align: left; padding: 20px 0;">
-    <h1 style="color: #00541f; font-size: 24px; margin: 0;">🧭 Navegación</h1>
-</div>
-""", unsafe_allow_html=True)
+st.sidebar.title(":material/explore: Navegación")
 
 pagina = st.sidebar.radio(
     "Seleccione una opción:",
-    ["📝 Estudiante Individual", "📊 Análisis Masivo"]
+    [":material/person_search: Estudiante Individual", ":material/article_person: Análisis Masivo"]
 )
 
 # st.sidebar.markdown("---")
 st.sidebar.markdown(" ")
 st.sidebar.markdown("""
 <div style="background: rgba(4, 151, 53, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #049735;">
-    <h3 style="color: #00541f; margin-top: 0;">📋 Acerca del Sistema</h3>
+    <h3 style="color: #00541f; margin-top: 0;">Acerca del Sistema</h3>
     <ul style="color: #333333; margin-bottom: 0;">
         <li><strong>Página Individual</strong>: Analiza un estudiante específico</li>
         <li><strong>Análisis Masivo</strong>: Procesa múltiples estudiantes desde Excel</li>
@@ -567,22 +563,22 @@ st.sidebar.markdown("""<div style="text-align: center; padding: 10px 0;">
 # --------------------------------------------------
 # Página 1: Estudiante Individual
 # --------------------------------------------------
-if pagina == "📝 Estudiante Individual":
+if pagina == ":material/person_search: Estudiante Individual":
 
-    st.markdown(create_colored_header("📝 Análisis Individual de Estudiante", 'primary', 1), unsafe_allow_html=True)
+    st.title(" Análisis Individual de Estudiante :material/person_search:")
     st.markdown("Ingrese los datos de un estudiante para obtener predicciones personalizadas.")
     
     # ---------- Selector de grado ----------
     grado = st.radio(
         "Seleccione el grado en que se encuentra el estudiante",
-        options=["8 o 9", "10 o 11"],
+        options=["9 o 10", "11"],
         horizontal=True,
     )
 
     # Asignar el módulo basado en la selección
-    if grado == "8 o 9":
+    if grado == "9 o 10":
         modulo = 14
-    else:  # "10 o 11"
+    else:  # "11"
         modulo = 24
     st.markdown("---")
 
@@ -590,16 +586,16 @@ if pagina == "📝 Estudiante Individual":
 
     # ---------- Formulario ----------
     with st.form("formulario_estudiante"):
-        # 🆔 Identificación
-        st.subheader("🆔 Identificación")
+        # Identificación
+        st.subheader("Código del estudiante")
         id_estudiante = st.text_input(
-            "Identificador del estudiante",
+            "Identificador del estudiante, se utiliza para guardar los resultados",
             value="",
             help="Ingrese el identificador único del estudiante",
         )
 
         # 📋 Información Demográfica
-        st.subheader("📋 Información Demográfica")
+        st.subheader("Información Demográfica")
         col1, col2 = st.columns(2)
         with col1:
             estu_mujer = st.selectbox(
@@ -619,7 +615,7 @@ if pagina == "📝 Estudiante Individual":
             )
 
         # 🎓 Educación padres
-        st.subheader("🎓 Educación Máxima de los Padres/Madres")
+        st.subheader(":material/School: Educación Máxima de los Padres/Madres")
         st.markdown('''Seleccione el *máximo nivel educativo alcanzado* entre los padres del estudiante.''')
         
         educ_max_total = st.radio(
@@ -642,7 +638,7 @@ if pagina == "📝 Estudiante Individual":
         
     
         # ⚠️ Faltas
-        st.subheader("⚠️ Comportamiento")
+        st.subheader(":material/person_alert: Comportamiento")
         total_faltas_disc = st.number_input(
             "Número total de faltas disciplinarias del estudiante",
             min_value=0,
@@ -651,7 +647,7 @@ if pagina == "📝 Estudiante Individual":
         )
 
         # 📚 Promedios 8°
-        st.subheader("📚 Promedios de 8° Grado")
+        st.subheader(":material/rubric: Promedios de 8° Grado")
         st.markdown("*Promedio obtenido en 8° grado en cada área (escala 0-100)*")
         col1, col2 = st.columns(2)
         with col1:
@@ -659,32 +655,36 @@ if pagina == "📝 Estudiante Individual":
                 "Humanidades, lengua castellana e idiomas extranjeros",
                 min_value=0.0,
                 max_value=100.0,
-                value=85.0,
-                step=0.1,
+                value=0.0,
+                step=1.0,
             )
             maths_08 = st.number_input(
                 "Matemáticas",
                 min_value=0.0,
                 max_value=100.0,
-                value=85.0,
-                step=0.1,
+                value=0.0,
+                step=1.0,
             )
         with col2:
             nat_sc_08 = st.number_input(
                 "Ciencias naturales y educación ambiental",
                 min_value=0.0,
                 max_value=100.0,
-                value=85.0,
-                step=0.1,
+                value=0.0,
+                step=1.0,
             )
             soc_sc_08 = st.number_input(
                 "Ciencias sociales, historia, geografía, constitución política y democracia",
                 min_value=0.0,
                 max_value=100.0,
-                value=85.0,
-                step=0.1,
+                value=0.0,
+                step=1.0,
             )
-            
+        
+        if human_langs_08 == 0.0 or maths_08 == 0.0 or nat_sc_08 == 0.0 or soc_sc_08 == 0.0:
+            st.warning('''Al menos uno de los promedios de 8° grado es 0.
+                       Verifique que los datos son correctos.''')
+        
         if modulo == 24:
             # 📊 NWEA
             st.subheader("📊 Pruebas NWEA MAP (Grados 9° y 10°)")
@@ -712,6 +712,8 @@ if pagina == "📝 Estudiante Individual":
             nwea_reading_perc = 50.0
 
         st.markdown("---")
+
+        
         submitted = st.form_submit_button("🚀 Procesar Datos", use_container_width=True)
 
     # ---------- Procesar ----------
@@ -772,8 +774,16 @@ if pagina == "📝 Estudiante Individual":
         # 3️⃣ Mostrar confirmación y resumen
         st.markdown(create_success_box("¡Datos capturados y procesados exitosamente!"), unsafe_allow_html=True)
 
+        with st.expander("Resumen de Datos Ingresados"):
+
+            df_resumen = (
+                pd.DataFrame({"Variable": list(datos.keys()), "Valor": list(datos.values())})
+                .set_index("Variable")
+            )
+            st.dataframe(df_resumen, use_container_width=True)
+        
         # ---- Resumen de predicciones
-        st.subheader("📈 Predicción por Materia")
+        st.subheader(":material/dictionary: Predicción por Materia")
         
         for materia, valor in sorted(resultados.items()):
                 if valor > 0.7:
@@ -797,10 +807,10 @@ if pagina == "📝 Estudiante Individual":
         st.markdown("""
             ---
             ### 📏 **Escala de Interpretación:**
-            - 🟢 Alto potencial (predicción > 0.7 )
-            - 🟡 Potencial moderado (predicción > 0.5)
-            - 🟠 Potencial bajo (predicción > 0.3)
-            - 🔴 Necesita apoyo (predicción ≤ 0.3)
+            - 🟢 No requiere apoyo (predicción > 0.7 )
+            - 🟡 Apoyo básico (predicción > 0.5)
+            - 🟠 Apoyo moderado (predicción > 0.3)
+            - 🔴 Apoyo prioritario (predicción ≤ 0.3)
     
             """)
 
@@ -808,7 +818,7 @@ if pagina == "📝 Estudiante Individual":
         # ---- Explicación de cómo se calculan las predicciones
         with st.expander("🧮 ¿Cómo se calculan estas predicciones?"):
             st.markdown("""
-            ### 📊 **Método de Cálculo: Modelo Probit**
+            ###  **Método de Cálculo: Modelo Probit**
             
             Cada predicción se calcula usando la fórmula matemática:
             
@@ -830,23 +840,10 @@ if pagina == "📝 Estudiante Individual":
             ```
             """)
         
-        # ---- Interpretación de resultados
-        with st.expander("📋 Descarga de resultados"):
-            pred_df = (
-                pd.Series(resultados)
-                .rename_axis("Materia")
-                .reset_index(name="Predicción")
-            )
-            pred_df['Alto'] = pred_df['Predicción'] > 0.5
-            
-            # Redondear predicciones para mejor visualización
-            pred_df["Predicción"] = pred_df["Predicción"].round(2)
-            st.dataframe(pred_df, use_container_width=True)
-           
         
         # ---- Cálculos detallados por materia
         with st.expander("🔬 Ver Cálculos Paso a Paso por Materia"):
-            st.markdown("### 🧮 **Detalles de los Cálculos**")
+            st.markdown("###  **Detalles de los Cálculos**")
             st.markdown("*Solo se muestran las contribuciones significativas (> 0.001)*")
             
             for materia in sorted(resultados.keys()):
@@ -895,16 +892,6 @@ if pagina == "📝 Estudiante Individual":
                 
             st.markdown(f"**Promedio de predicciones:** {promedio_predicciones:.3f}")
                 
-        st.markdown("---")
-
-        # ---- Tabla con los datos capturados
-        st.subheader("📋 Resumen de Datos Capturados")
-        df_resumen = (
-            pd.DataFrame({"Variable": list(datos.keys()), "Valor": list(datos.values())})
-            .set_index("Variable")
-        )
-        st.dataframe(df_resumen, use_container_width=True)
-
         # ---- Descargar datos + predicciones
         st.markdown("---")
         out = {**datos, **{f"pred_{k.lower()}": v for k, v in resultados.items()}}
