@@ -942,7 +942,7 @@ if pagina == ":material/person_search: Estudiante Individual":
         # Descargar como Excel
         excel_data = convert_df_to_excel(df_download, 'Datos_Estudiante')
         st.download_button(
-            "� Descargar como Excel",
+            "Descargar como Excel",
             data=excel_data,
             file_name=f"datos_estudiante_{id_estudiante}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -1230,7 +1230,7 @@ elif pagina == ":material/article_person: Análisis Masivo":
                     # DESCARGA DE RESULTADOS
                     # --------------------------------------------------
                     
-                    st.subheader("📥 Descargar Resultados")
+                    st.subheader("Descargar Resultados")
                     
                     col1, col2 = st.columns(2)
                     
@@ -1238,7 +1238,7 @@ elif pagina == ":material/article_person: Análisis Masivo":
                         # Descarga completa como Excel
                         excel_completo = convert_df_to_excel(df_completo, 'Analisis_Completo')
                         st.download_button(
-                            "� Descargar Datos Completos (Excel)",
+                            "Descargar Datos Completos (Excel)",
                             data=excel_completo,
                             file_name="analisis_masivo_completo.xlsx",
                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -1248,14 +1248,14 @@ elif pagina == ":material/article_person: Análisis Masivo":
                         # Descarga estadísticas como Excel
                         excel_stats = convert_df_to_excel(df_stats, 'Estadisticas')
                         st.download_button(
-                            "📊 Descargar Estadísticas (Excel)",
+                            "Descargar Estadísticas (Excel)",
                             data=excel_stats,
                             file_name="estadisticas_predicciones.xlsx",
                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                         )
 
                     # Vista previa de resultados
-                    with st.expander("👁️ Vista Previa de Resultados Completos"):
+                    with st.expander("Vista Previa de Resultados Completos"):
                         st.dataframe(df_completo, use_container_width=True)
         
         except Exception as e:
