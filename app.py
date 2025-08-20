@@ -6,6 +6,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy.stats import norm
+from io import BytesIO
 
 # --------------------------------------------------
 # Configuración de colores y estilos
@@ -324,6 +325,14 @@ def configure_plotly_theme():
         )
     )
     pio.templates.default = "parrish"
+    
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.close() # Or writer.save() for older pandas versions
+    processed_data = output.getvalue()
+    return processed_data
 
 def create_colored_header(text, color_key='primary', level=1):
     """Crea un header con colores personalizados"""
@@ -368,6 +377,23 @@ def create_info_box(text):
         <p style="color: #00541f; margin: 0; font-weight: 500;">ℹ️ {text}</p>
     </div>
     """
+
+def convert_df_to_excel(df, sheet_name='Data'):
+    """Convierte un DataFrame a formato Excel en bytes"""
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name=sheet_name, index=False)
+    output.seek(0)
+    return output.getvalue()
+
+def convert_multiple_dfs_to_excel(dataframes_dict):
+    """Convierte múltiples DataFrames a un archivo Excel con varias hojas"""
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        for sheet_name, df in dataframes_dict.items():
+            df.to_excel(writer, sheet_name=sheet_name, index=False)
+    output.seek(0)
+    return output.getvalue()
 
 # 📂 Ruta del archivo de coeficientes
 MODELOS_XLSX = Path(__file__).with_name("Coeficientes_modelos.xlsx")
@@ -742,10 +768,19 @@ if pagina == ":material/person_search: Estudiante Individual":
         }
 
         # 2️⃣ Calcular predicciones para todas las materias
-        materias = ["lectura", "math", "soc", "cnat", "ingles", "global"]
+        materias = ["global", "lectura", "math", "cnat", "soc", "ingles",]
         resultados = {}
         detalles_calculo = {}
         errores = []
+        
+        nombres_materias = {
+            "GLOBAL": "Global",
+            "LECTURA": "Lectura",
+            "MATH": "Matemáticas",
+            "CNAT": "Ciencias Naturales",
+            "SOC": "Ciencias Sociales",
+            "INGLES": "Inglés",
+        }
         
         for materia in materias:
             try:
@@ -785,24 +820,27 @@ if pagina == ":material/person_search: Estudiante Individual":
         # ---- Resumen de predicciones
         st.subheader(":material/dictionary: Predicción por Materia")
         
-        for materia, valor in sorted(resultados.items()):
-                if valor > 0.7:
-                    interpretacion = "🟢 "
-                    emoji = "✅"
-                elif valor > 0.5:
-                    interpretacion = "🟡 "
-                    emoji = "📈"
-                elif valor > 0.3:
-                    interpretacion = "🟠 "
-                    emoji = "⚠️"
-                else:
-                    interpretacion = "🔴 "
-                    emoji = "📉"
-                
-                st.markdown(f"""
-                **{emoji} {materia}**: {interpretacion} `{valor:.2f}`  
-                
-                """)
+ 
+        
+        for materia, valor in resultados.items():
+            nombre_materia = nombres_materias.get(materia, materia)
+            if valor > 0.7:
+                interpretacion = "🟢 "
+                emoji = "✅"
+            elif valor > 0.5:
+                interpretacion = "🟡 "
+                emoji = "📈"
+            elif valor > 0.3:
+                interpretacion = "🟠 "
+                emoji = "⚠️"
+            else:
+                interpretacion = "🔴 "
+                emoji = "📉"
+
+            st.markdown(f"""
+            **{emoji} {nombre_materia}**: {interpretacion} `{valor:.2f}`
+
+            """)
             
         st.markdown("""
             ---
@@ -869,14 +907,17 @@ if pagina == ":material/person_search: Estudiante Individual":
             # Identificar fortalezas y áreas de mejora
             materias_ordenadas = sorted(resultados.items(), key=lambda x: x[1], reverse=True)
             mejor_materia = materias_ordenadas[0]
+           
+            nombre_mejor_materia = nombres_materias[mejor_materia[0]]
             peor_materia = materias_ordenadas[-1]
-            
+            nombre_peor_materia = nombres_materias[peor_materia[0]]
+
             st.markdown(f"""
-            **🌟 Fortaleza principal:** {mejor_materia[0]} (predicción: {mejor_materia[1]:.3f})
+            **🌟 Fortaleza principal:** {nombre_mejor_materia} (predicción: {mejor_materia[1]:.3f})
             - Aprovechar esta fortaleza para motivar al estudiante
             - Usar estrategias exitosas de esta área en otras materias
-            
-            **🎯 Área de mayor atención:** {peor_materia[0]} (predicción: {peor_materia[1]:.3f})
+
+            **🎯 Área de mayor atención:** {nombre_peor_materia} (predicción: {peor_materia[1]:.3f})
             - Implementar estrategias de apoyo específicas
             - Considerar tutoría adicional o recursos complementarios
             """)
@@ -895,12 +936,16 @@ if pagina == ":material/person_search: Estudiante Individual":
         # ---- Descargar datos + predicciones
         st.markdown("---")
         out = {**datos, **{f"pred_{k.lower()}": v for k, v in resultados.items()}}
-        csv = pd.DataFrame([out]).to_csv(index=False)
+        df_download = pd.DataFrame([out])
+        
+
+        # Descargar como Excel
+        excel_data = convert_df_to_excel(df_download, 'Datos_Estudiante')
         st.download_button(
-            "📥 Descargar todo como CSV",
-            data=csv,
-            file_name=f"datos_estudiante_{id_estudiante}.csv",
-            mime="text/csv",
+            "� Descargar como Excel",
+            data=excel_data,
+            file_name=f"datos_estudiante_{id_estudiante}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 
 # --------------------------------------------------
@@ -1063,7 +1108,7 @@ elif pagina == ":material/article_person: Análisis Masivo":
                     st.subheader(":material/finance_mode: Estadísticas de Predicciones")
                     
                     # Crear tabla de estadísticas
-                    materias_pred = ['pred_lectura', 'pred_math', 'pred_soc', 'pred_cnat', 'pred_ingles', 'pred_global']
+                    materias_pred = ['pred_global', 'pred_lectura', 'pred_math', 'pred_cnat', 'pred_soc', 'pred_ingles' ]
                     stats_data = []
                     
                     for materia in materias_pred:
@@ -1128,6 +1173,7 @@ elif pagina == ":material/article_person: Análisis Masivo":
                                     subset = df_completo[df_completo['estu_mujer'] == genero]
                                     if len(subset) > 0:
                                         promedio = subset[materia].mean()
+                                        promedio = round(promedio, 2)
                                         genero_data.append({
                                             'Materia': materia.replace('pred_', '').upper(),
                                             'Género': 'Mujer' if genero == 1 else 'Hombre',
@@ -1142,7 +1188,8 @@ elif pagina == ":material/article_person: Análisis Masivo":
                                 y='Promedio', 
                                 color='Género',
                                 title="Promedio de Predicciones por Género",
-                                barmode='group'
+                                barmode='group',
+                                range_y=(0,1.1)
                             )
                             st.plotly_chart(fig_genero, use_container_width=True)
                     
@@ -1156,6 +1203,7 @@ elif pagina == ":material/article_person: Análisis Masivo":
                         if materia in df_completo.columns:
                             bajo_rendimiento = (df_completo[materia] < threshold).sum()
                             porcentaje = bajo_rendimiento / len(df_completo) * 100
+                            porcentaje = round(porcentaje, 2)
                             materias_bajo.append({
                                 'Materia': materia.replace('pred_', '').upper(),
                                 'Estudiantes en Riesgo': bajo_rendimiento,
@@ -1173,7 +1221,8 @@ elif pagina == ":material/article_person: Análisis Masivo":
                             y='Porcentaje',
                             title="Porcentaje de Estudiantes en Riesgo por Materia",
                             color='Porcentaje',
-                            color_continuous_scale="Reds"
+                            color_continuous_scale="Reds",
+                            range_y=(0, 101)
                         )
                         st.plotly_chart(fig_riesgo, use_container_width=True)
                     
@@ -1181,30 +1230,30 @@ elif pagina == ":material/article_person: Análisis Masivo":
                     # DESCARGA DE RESULTADOS
                     # --------------------------------------------------
                     
-                    st.subheader(":material/browser_updated: Descargar Resultados")
+                    st.subheader("📥 Descargar Resultados")
                     
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        # Descarga completa
-                        csv_completo = df_completo.to_csv(index=False)
+                        # Descarga completa como Excel
+                        excel_completo = convert_df_to_excel(df_completo, 'Analisis_Completo')
                         st.download_button(
-                            "📄 Descargar Datos Completos (CSV)",
-                            data=csv_completo,
-                            file_name="analisis_masivo_completo.csv",
-                            mime="text/csv"
+                            "� Descargar Datos Completos (Excel)",
+                            data=excel_completo,
+                            file_name="analisis_masivo_completo.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                         )
-                    
+                                            
                     with col2:
-                        # Descarga solo estadísticas
-                        csv_stats = df_stats.to_csv(index=False)
+                        # Descarga estadísticas como Excel
+                        excel_stats = convert_df_to_excel(df_stats, 'Estadisticas')
                         st.download_button(
-                            "📊 Descargar Estadísticas (CSV)",
-                            data=csv_stats,
-                            file_name="estadisticas_predicciones.csv",
-                            mime="text/csv"
+                            "📊 Descargar Estadísticas (Excel)",
+                            data=excel_stats,
+                            file_name="estadisticas_predicciones.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                         )
-                    
+
                     # Vista previa de resultados
                     with st.expander("👁️ Vista Previa de Resultados Completos"):
                         st.dataframe(df_completo, use_container_width=True)
